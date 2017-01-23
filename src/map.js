@@ -9,7 +9,7 @@ L.tileLayer('https:///tiles{s}.aachen.freifunk.net/{z}/{x}/{y}.png', {
     "maxZoom": 19
 }).addTo(map);
 
-var createMarker = function(latlng, hostname, clients, online) {
+var createMarker = function(latlng, hostname, nodeId, clients, online) {
     var color = (online) ? "#1566A9" : "#B42E20";
     var fillColor = (online) ? "#5DA439": "#D43E2A";
     
@@ -17,6 +17,7 @@ var createMarker = function(latlng, hostname, clients, online) {
     
     var marker = L.circleMarker(latlng, {radius: 7, weight: 1, color: color, fill: true, fillColor: fillColor, fillOpacity: 1.0});
     marker.bindTooltip(hostname + "<br/>" + status);
+    marker.bindPopup(hostname + "<br/>" + "<a href=\"https://map.aachen.freifunk.net/#!v:m;n:" + nodeId + "\">Auf Expertenkarte anzeigen</a>")
     return marker;
 }
 
@@ -53,7 +54,7 @@ var createNodeMarkers = function(status, data) {
             var nodeinfo = node.nodeinfo;
             if (nodeinfo.location !== undefined && nodeinfo.location.latitude !== undefined && nodeinfo.location.longitude !== undefined) {
                 
-                markers[online].push(createMarker([nodeinfo.location.latitude, nodeinfo.location.longitude], nodeinfo.hostname, clients, online));
+                markers[online].push(createMarker([nodeinfo.location.latitude, nodeinfo.location.longitude], nodeinfo.hostname, nodeinfo.node_id, clients, online));
             }
         }
     }
